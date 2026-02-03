@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"math"
-	"sort"
+	"pack-calculator/internal/packutil"
 )
 
 var (
@@ -19,11 +19,15 @@ func Solve(amount int, packSizes []int) (Solution, error) {
 		return Solution{}, ErrInvalidAmount
 	}
 
-	sizes, err := normalizePackSizes(packSizes)
+	sizes, err := packutil.NormalizePackSizes(packSizes, ErrInvalidPackSizes)
 	if err != nil {
 		return Solution{}, fmt.Errorf("can't normalize packsize %w", err)
 	}
 
+	return solveNormalized(amount, sizes)
+}
+
+func solveNormalized(amount int, sizes []int) (Solution, error) {
 	if amount == 0 {
 		return Solution{
 			Amount:       0,
@@ -85,26 +89,4 @@ func Solve(amount int, packSizes []int) (Solution, error) {
 		PackCount:    packCount,
 		Packs:        packs,
 	}, nil
-}
-
-func normalizePackSizes(packSizes []int) ([]int, error) {
-	if len(packSizes) == 0 {
-		return nil, ErrInvalidPackSizes
-	}
-
-	seen := make(map[int]struct{}, len(packSizes))
-	for _, p := range packSizes {
-		if p <= 0 {
-			return nil, ErrInvalidPackSizes
-		}
-		seen[p] = struct{}{}
-	}
-
-	out := make([]int, 0, len(seen))
-	for p := range seen {
-		out = append(out, p)
-	}
-
-	sort.Ints(out)
-	return out, nil
 }
