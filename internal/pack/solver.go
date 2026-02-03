@@ -1,3 +1,110 @@
 package pack
 
-// TODO: implement pack calculation algorithm.
+import (
+	"errors"
+	"fmt"
+	"math"
+	"sort"
+)
+
+var (
+	ErrInvalidAmount    = errors.New("amount must be >= 0")
+	ErrInvalidPackSizes = errors.New("pack sizes must be positive")
+	ErrNoSolution       = errors.New("no solution found")
+	ErrReconstruct      = errors.New("failed to reconstruct solution")
+)
+
+func Solve(amount int, packSizes []int) (Solution, error) {
+	if amount < 0 {
+		return Solution{}, ErrInvalidAmount
+	}
+
+	sizes, err := normalizePackSizes(packSizes)
+	if err != nil {
+		return Solution{}, fmt.Errorf("can't normalize packsize %w", err)
+	}
+
+	if amount == 0 {
+		return Solution{
+			Amount:       0,
+			ItemsShipped: 0,
+			Overage:      0,
+			PackCount:    0,
+			Packs:        map[int]int{},
+		}, nil
+	}
+
+	maxPack := sizes[len(sizes)-1]
+	limit := amount + maxPack - 1
+
+	const inf = math.MaxInt32
+	dp := make([]int, limit+1)
+	prev := make([]int, limit+1)
+
+	for i := 1; i <= limit; i++ {
+		dp[i] = inf
+		prev[i] = -1
+	}
+
+	for t := 1; t <= limit; t++ {
+		for _, p := range sizes {
+			if t >= p && dp[t-p]+1 < dp[t] {
+				dp[t] = dp[t-p] + 1
+				prev[t] = p
+			}
+		}
+	}
+
+	bestTotal := -1
+	for t := amount; t <= limit; t++ {
+		if dp[t] != inf {
+			bestTotal = t
+			break
+		}
+	}
+	if bestTotal == -1 {
+		return Solution{}, ErrNoSolution
+	}
+
+	packs := make(map[int]int)
+	packCount := 0
+	for t := bestTotal; t > 0; {
+		p := prev[t]
+		if p <= 0 {
+			return Solution{}, ErrReconstruct
+		}
+		packs[p]++
+		packCount++
+		t -= p
+	}
+
+	return Solution{
+		Amount:       amount,
+		ItemsShipped: bestTotal,
+		Overage:      bestTotal - amount,
+		PackCount:    packCount,
+		Packs:        packs,
+	}, nil
+}
+
+func normalizePackSizes(packSizes []int) ([]int, error) {
+	if len(packSizes) == 0 {
+		return nil, ErrInvalidPackSizes
+	}
+
+	seen := make(map[int]struct{}, len(packSizes))
+	for _, p := range packSizes {
+		if p <= 0 {
+			return nil, ErrInvalidPackSizes
+		}
+		seen[p] = struct{}{}
+	}
+
+	out := make([]int, 0, len(seen))
+	for p := range seen {
+		out = append(out, p)
+	}
+
+	sort.Ints(out)
+	return out, nil
+}
