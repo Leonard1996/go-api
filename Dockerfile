@@ -10,7 +10,7 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o server ./cmd/server
 FROM gcr.io/distroless/static-debian12
 WORKDIR /app
 ENV PORT=8080
-ENV DB_PATH=/app/packs.db
+ENV DB_PATH=/tmp/packs.db
 ENV WEB_DIR=/app/web
 COPY --from=builder /app/server /app/server
 COPY --from=builder /app/web /app/web
