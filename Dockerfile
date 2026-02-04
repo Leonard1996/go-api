@@ -4,6 +4,7 @@ WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
+COPY data data
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o server ./cmd/server
 
 # Runtime stage
@@ -14,7 +15,7 @@ ENV DB_PATH=/app/data/packs.db
 ENV WEB_DIR=/app/web
 COPY --from=builderONE /app/server /app/server
 COPY --from=builderONE /app/web /app/web
-COPY --from=builderONE /app/data /app/data
+
 EXPOSE 8080
 USER nonroot:nonroot
 ENTRYPOINT ["/app/server"]
