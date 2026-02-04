@@ -7,24 +7,47 @@ HTTP API + simple UI to compute optimal pack combinations for a given order amou
 - Secondary objective: minimize number of packs.
 - Pack sizes are configurable at runtime via API.
 
-## Requirements
-- Go 1.22+
-- SQLite (embedded, via pure Go driver)
 
 ## Quickstart (Local)
-TODO: add `go run` instructions after implementation.
+```bash
+go run ./cmd/server
+```
 
-## Quickstart (Docker)
-TODO: add `docker build` + `docker run` instructions after implementation.
+Open:
+- UI: http://localhost:8080
+- Health: http://localhost:8080/healthz
+
+## Docker Compose
+```bash
+docker compose up --build
+```
 
 ## API
-TODO: document endpoints and request/response schemas.
+- `GET /healthz`
+- `GET /v1/pack-sizes`
+- `PUT /v1/pack-sizes`
+- `POST /v1/calculate`
+
+Example:
+```bash
+curl -s -X PUT http://localhost:8080/v1/pack-sizes \
+  -H "Content-Type: application/json" \
+  -d '{"pack_sizes":[23,31,53]}'
+
+curl -s -X POST http://localhost:8080/v1/calculate \
+  -H "Content-Type: application/json" \
+  -d '{"amount":500000}'
+```
 
 ## UI
-TODO: describe how to access the UI once implemented.
+Open `http://localhost:8080` in the browser.
 
 ## Tests
-TODO: add `go test ./...` instructions.
+```bash
+go test ./...
+```
 
 ## Configuration
-TODO: document env vars (port, DB path, etc.).
+- `PORT` (default: `8080`)
+- `DB_PATH` (default: `data/packs.db`)
+- `WEB_DIR` (default: `web`)

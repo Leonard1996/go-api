@@ -1,0 +1,10 @@
+.git
+.gitignore
+README.md
+Dockerfile
+**/*.md
+**/*_test.go
+/tmp
+/tmp/**
+/data
+/data/**
