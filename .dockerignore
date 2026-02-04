@@ -6,5 +6,3 @@ Dockerfile
 **/*_test.go
 /tmp
 /tmp/**
-/data
-/data/**

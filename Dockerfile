@@ -14,6 +14,7 @@ ENV DB_PATH=/app/data/packs.db
 ENV WEB_DIR=/app/web
 COPY --from=builder /app/server /app/server
 COPY --from=builder /app/web /app/web
+COPY --from=builder /app/data /app/data
 EXPOSE 8080
 USER nonroot:nonroot
 ENTRYPOINT ["/app/server"]
