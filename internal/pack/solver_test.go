@@ -11,52 +11,34 @@ func TestSolve_SpecExamples(t *testing.T) {
 	packSizes := []int{250, 500, 1000, 2000, 5000}
 
 	cases := []struct {
-		name        string
-		amount      int
-		items       int
-		expected    map[int]int
-		packCount   int
-		overage     int
+		name     string
+		amount   int
+		expected map[int]int
 	}{
 		{
-			name:      "order 1",
-			amount:    1,
-			items:     250,
-			expected:  map[int]int{250: 1},
-			packCount: 1,
-			overage:   249,
+			name:     "order 1",
+			amount:   1,
+			expected: map[int]int{250: 1},
 		},
 		{
-			name:      "order 250",
-			amount:    250,
-			items:     250,
-			expected:  map[int]int{250: 1},
-			packCount: 1,
-			overage:   0,
+			name:     "order 250",
+			amount:   250,
+			expected: map[int]int{250: 1},
 		},
 		{
-			name:      "order 251",
-			amount:    251,
-			items:     500,
-			expected:  map[int]int{500: 1},
-			packCount: 1,
-			overage:   249,
+			name:     "order 251",
+			amount:   251,
+			expected: map[int]int{500: 1},
 		},
 		{
-			name:      "order 501",
-			amount:    501,
-			items:     750,
-			expected:  map[int]int{500: 1, 250: 1},
-			packCount: 2,
-			overage:   249,
+			name:     "order 501",
+			amount:   501,
+			expected: map[int]int{500: 1, 250: 1},
 		},
 		{
-			name:      "order 12001",
-			amount:    12001,
-			items:     12250,
-			expected:  map[int]int{5000: 2, 2000: 1, 250: 1},
-			packCount: 4,
-			overage:   249,
+			name:     "order 12001",
+			amount:   12001,
+			expected: map[int]int{5000: 2, 2000: 1, 250: 1},
 		},
 	}
 
@@ -64,10 +46,6 @@ func TestSolve_SpecExamples(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			res, err := Solve(tc.amount, packSizes)
 			require.NoError(t, err)
-			assert.Equal(t, tc.amount, res.Amount)
-			assert.Equal(t, tc.items, res.ItemsShipped)
-			assert.Equal(t, tc.overage, res.Overage)
-			assert.Equal(t, tc.packCount, res.PackCount)
 			assert.Equal(t, tc.expected, res.Packs)
 		})
 	}
@@ -79,8 +57,6 @@ func TestSolve_EdgeCaseLargeAmount(t *testing.T) {
 
 	res, err := Solve(amount, packSizes)
 	require.NoError(t, err)
-	assert.Equal(t, amount, res.ItemsShipped)
-	assert.Equal(t, 0, res.Overage)
 	assert.Equal(t, map[int]int{23: 2, 31: 7, 53: 9429}, res.Packs)
 }
 

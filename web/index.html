@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pack Calculator</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="py-5 bg-light">
+    <main class="container">
+      <div class="mb-4">
+        <h1 class="fw-semibold">Pack Calculator</h1>
+        <p class="text-muted">Update pack sizes and calculate the best pack combination.</p>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-lg-6">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">Pack sizes</h5>
+              <label for="packSizes" class="form-label">Pack sizes</label>
+              <textarea
+                id="packSizes"
+                class="form-control"
+                rows="5"
+                placeholder="250\n500\n1000"
+              ></textarea>
+              <div class="form-text">One pack size per line.</div>
+              <div class="d-flex flex-wrap align-items-center gap-2 mt-3">
+                <button id="saveSizes" class="btn btn-success">Update pack sizes</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">Calculate</h5>
+              <label for="amount" class="form-label">Items ordered</label>
+              <input id="amount" type="number" min="0" class="form-control" placeholder="263" />
+              <div class="d-flex flex-wrap align-items-center gap-2 mt-3">
+                <button id="calculate" class="btn btn-primary">Calculate</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card shadow-sm mt-4">
+        <div class="card-body">
+          <h5 class="card-title">Result</h5>
+          <div class="table-responsive">
+            <table class="table table-sm align-middle" id="resultTable">
+              <thead>
+                <tr>
+                  <th>Pack</th>
+                  <th>Quantity</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>

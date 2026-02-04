@@ -30,11 +30,7 @@ func Solve(amount int, packSizes []int) (Solution, error) {
 func solveNormalized(amount int, sizes []int) (Solution, error) {
 	if amount == 0 {
 		return Solution{
-			Amount:       0,
-			ItemsShipped: 0,
-			Overage:      0,
-			PackCount:    0,
-			Packs:        map[int]int{},
+			Packs: map[int]int{},
 		}, nil
 	}
 
@@ -71,22 +67,16 @@ func solveNormalized(amount int, sizes []int) (Solution, error) {
 	}
 
 	packs := make(map[int]int)
-	packCount := 0
 	for t := bestTotal; t > 0; {
 		p := prev[t]
 		if p <= 0 {
 			return Solution{}, ErrReconstruct
 		}
 		packs[p]++
-		packCount++
 		t -= p
 	}
 
 	return Solution{
-		Amount:       amount,
-		ItemsShipped: bestTotal,
-		Overage:      bestTotal - amount,
-		PackCount:    packCount,
-		Packs:        packs,
+		Packs: packs,
 	}, nil
 }
