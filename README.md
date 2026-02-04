@@ -42,6 +42,9 @@ curl -s -X POST http://localhost:8080/v1/calculate \
 ## UI
 Open `http://localhost:8080` in the browser.
 
+## Deployment
+Live URL: `https://go-api-2mkw.onrender.com/`
+
 ## Tests
 ```bash
 go test ./...
