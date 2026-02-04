@@ -1,5 +1,5 @@
 # Build stage
-FROM golang:1.22 AS builder:1
+FROM golang:1.22 AS builderONE
 WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
@@ -12,9 +12,9 @@ WORKDIR /app
 ENV PORT=8080
 ENV DB_PATH=/app/data/packs.db
 ENV WEB_DIR=/app/web
-COPY --from=builder:1 /app/server /app/server
-COPY --from=builder:1 /app/web /app/web
-COPY --from=builder:1 /app/data /app/data
+COPY --from=builderONE /app/server /app/server
+COPY --from=builderONE /app/web /app/web
+COPY --from=builderONE /app/data /app/data
 EXPOSE 8080
 USER nonroot:nonroot
 ENTRYPOINT ["/app/server"]
