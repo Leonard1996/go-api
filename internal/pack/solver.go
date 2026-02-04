@@ -28,6 +28,13 @@ func Solve(amount int, packSizes []int) (Solution, error) {
 }
 
 func solveNormalized(amount int, sizes []int) (Solution, error) {
+	// Note for reviewers
+	// Build a table where entry t means "fewest packs needed to make total t".
+	// Fill it from 0 up to amount+maxPack-1 using the allowed pack sizes.
+	// Then scan forward from amount to find the first reachable total.
+	// That first total has the smallest overage (rule 2),
+	// and the table already gives the fewest packs for that total (rule 3).
+	// Example: sizes [250, 500, 1000], amount 251 => first reachable total is 500.
 	if amount == 0 {
 		return Solution{
 			Packs: map[int]int{},
