@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
-	"path/filepath"
 	"syscall"
 	"time"
 
@@ -24,10 +23,6 @@ func main() {
 	port := getEnv("PORT", "8080")
 	dbPath := getEnv("DB_PATH", "data/packs.db")
 	webDir := getEnv("WEB_DIR", "web")
-
-	if err := os.MkdirAll(filepath.Dir(dbPath), 0o755); err != nil {
-		log.Fatal().Err(err).Msg("create data dir")
-	}
 
 	db, err := sql.Open("sqlite", dbPath)
 	if err != nil {
